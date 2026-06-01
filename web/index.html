@@ -276,7 +276,18 @@ nav{
 .show-link:hover{color:var(--terracotta-d)}
 @media(max-width:760px){.show-grid{grid-template-columns:1fr}}
 
-footer{background:var(--teal-d);color:#9fb6b5;text-align:center;padding:30px;font-size:.9rem}
+/* ---------- KENAPA BERBAYAR ---------- */
+.why{padding:84px 6vw;background:var(--teal)}
+.why-card{max-width:740px;margin:0 auto;background:var(--paper);border-radius:22px;padding:44px 40px;
+  box-shadow:0 26px 54px rgba(0,0,0,.32);border-top:6px solid var(--gold)}
+.why-card h2{font-family:'Fraunces',serif;font-size:2rem;color:var(--terracotta);margin-bottom:20px;text-align:center}
+.why-card p{color:var(--ink-soft);line-height:1.8;margin-bottom:16px;font-size:1.06rem}
+.why-card p b{color:var(--ink)}
+.why-card .tip{text-align:center;font-family:'Kaushan Script',cursive;color:var(--sage);font-size:1.5rem;margin:26px 0 0}
+
+footer{background:var(--teal-d);color:#9fb6b5;text-align:center;padding:30px;font-size:.9rem;line-height:1.7}
+footer .contact{font-size:1rem;color:var(--cream);margin-bottom:12px}
+footer .contact a{color:var(--orange);font-weight:600}
 footer a{color:var(--orange);text-decoration:none}
 
 @media(max-width:760px){
@@ -297,6 +308,7 @@ footer a{color:var(--orange);text-decoration:none}
     <a href="#bench">Terjemahkan</a>
     <a href="#contoh">Contoh</a>
     <a href="#fitur">Fitur</a>
+    <a href="#kenapa">Kenapa Bayar?</a>
     <a href="#tentang">Tentang</a>
   </div>
   <div class="nav-dots"><i></i><i></i><i></i></div>
@@ -426,6 +438,17 @@ footer a{color:var(--orange);text-decoration:none}
   </div>
 </section>
 
+<!-- KENAPA BERBAYAR -->
+<section class="why" id="kenapa">
+  <div class="why-card">
+    <h2>Kenapa Kok Berbayar? 🥲</h2>
+    <p>Jujur, aku pengin banget gratisin ini. Tapi tiap kali kamu klik <b>"Bayar &amp; Terjemahkan"</b>, ada robot AI di balik layar yang kerja keras nyalin jurnalmu — dan dia <b>nggak mau dibayar pakai ucapan terima kasih</b>. Maunya token. Token itu… uang beneran. 💸</p>
+    <p>Server tempat aplikasi ini numpang juga <b>gratisan</b>, jadi suka ketiduran kayak kucing kalau lama nganggur. Sabar ya kalau dia butuh waktu sebentar buat melek. 🐈</p>
+    <p>Dan developer-nya? Cuma mahasiswa biasa yang dompetnya udah lama berpuasa. Uang <b>Rp 500/halaman</b> itu bukan buat beli Lamborghini — tapi buat <b>isi ulang kuota AI</b> biar para penyalin Bayt al-Ḥikmah ini terus bisa kerja, dan biar aku bisa tetap… ya, makan. 🍜</p>
+    <p class="tip">Anggap aja lagi traktir kopi buat si robot + developer melaratnya. Makasih udah nggak pelit~ 🙏</p>
+  </div>
+</section>
+
 <!-- TRANSLATION STAGE (Bayt al-Hikma) -->
 <div class="stage" id="stage">
   <div class="hall">
@@ -469,6 +492,7 @@ footer a{color:var(--orange);text-decoration:none}
 </div>
 
 <footer id="tentang">
+  <div class="contact">Ada kendala, bug, atau masukan? Lapor ke <a href="mailto:israfilraya1@gmail.com">israfilraya1@gmail.com</a> 📨</div>
   Naskah · Penerjemah Jurnal EN→ID.<br/>
   Ditenagai <a href="https://github.com/PDFMathTranslate/PDFMathTranslate">pdf2zh</a> + DeepSeek ·
   <a href="https://github.com/Aghzt/naskah">Kode sumber</a> · Lisensi AGPL-3.0.

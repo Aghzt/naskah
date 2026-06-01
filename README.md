@@ -1,7 +1,7 @@
 ---
 title: Naskah
 emoji: 🏛️
-colorFrom: orange
+colorFrom: yellow
 colorTo: indigo
 sdk: docker
 app_port: 7860
