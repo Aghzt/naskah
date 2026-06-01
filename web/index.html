@@ -370,8 +370,12 @@ footer a{color:var(--orange);text-decoration:none}
     </div>
   </div>
 
-  <div style="text-align:center;margin-top:34px">
-    <button class="btn" id="goBtn" style="opacity:.5;pointer-events:none">Mulai Terjemahkan</button>
+  <div id="quote" style="display:none;text-align:center;margin-top:26px;color:var(--cream)">
+    <span id="quoteText" style="font-size:1.05rem"></span>
+    <div style="font-size:.82rem;color:#9fb6b5;margin-top:4px">Rp 500 / halaman · minimum Rp 3.000</div>
+  </div>
+  <div style="text-align:center;margin-top:20px">
+    <button class="btn" id="goBtn" style="opacity:.5;pointer-events:none">Pilih berkas dulu</button>
   </div>
 </section>
 
@@ -465,8 +469,9 @@ footer a{color:var(--orange);text-decoration:none}
 </div>
 
 <footer id="tentang">
-  Naskah · Penerjemah Jurnal EN→ID — purwarupa antarmuka.<br/>
-  Ditenagai <a href="https://github.com/PDFMathTranslate/PDFMathTranslate">pdf2zh</a> + DeepSeek. Lisensi AGPL-3.0.
+  Naskah · Penerjemah Jurnal EN→ID.<br/>
+  Ditenagai <a href="https://github.com/PDFMathTranslate/PDFMathTranslate">pdf2zh</a> + DeepSeek ·
+  <a href="https://github.com/Aghzt/naskah">Kode sumber</a> · Lisensi AGPL-3.0.
 </footer>
 
 <script>
@@ -499,36 +504,103 @@ drop.addEventListener('keydown',e=>{if(e.key==='Enter')file.click()});
 ['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.style.borderColor='var(--terracotta)'}));
 drop.addEventListener('drop',e=>{if(e.dataTransfer.files[0])setFile(e.dataTransfer.files[0])});
 file.addEventListener('change',()=>{if(file.files[0])setFile(file.files[0])});
-function setFile(f){
-  chip.style.display='inline-block';
-  chip.textContent='📄 '+f.name;
-  goBtn.style.opacity='1';goBtn.style.pointerEvents='auto';
+/* ---- konfigurasi + Snap.js Midtrans ---- */
+let cfg=null, snapReady=false, currentFile=null;
+const rupiah=n=>'Rp '+(Number(n)||0).toLocaleString('id-ID');
+const quote=document.getElementById('quote'), quoteText=document.getElementById('quoteText');
+(async()=>{
+  try{
+    cfg=await (await fetch('/api/config')).json();
+    if(cfg.payment_enabled){
+      const s=document.createElement('script');
+      s.src=cfg.production?'https://app.midtrans.com/snap/snap.js':'https://app.sandbox.midtrans.com/snap/snap.js';
+      s.setAttribute('data-client-key',cfg.client_key);
+      s.onload=()=>{snapReady=true;};
+      document.head.appendChild(s);
+    }
+  }catch(e){}
+})();
+
+/* ---- upload + harga ---- */
+async function setFile(f){
+  chip.style.display='inline-block'; chip.textContent='📄 '+f.name;
+  goBtn.textContent='Mengunggah…'; goBtn.style.opacity='.6'; goBtn.style.pointerEvents='none';
+  quote.style.display='none';
+  try{
+    const fd=new FormData(); fd.append('file',f);
+    const r=await fetch('/api/upload',{method:'POST',body:fd});
+    if(!r.ok){ const j=await r.json().catch(()=>({})); throw new Error(j.detail||'Gagal mengunggah'); }
+    currentFile=await r.json();
+    quoteText.innerHTML=`<b>${currentFile.pages} halaman</b> &nbsp;·&nbsp; Biaya <b style="color:var(--orange)">${rupiah(currentFile.price)}</b>`;
+    quote.style.display='block';
+    goBtn.textContent = cfg && cfg.payment_enabled ? ('Bayar & Terjemahkan · '+rupiah(currentFile.price)) : 'Terjemahkan';
+    goBtn.style.opacity='1'; goBtn.style.pointerEvents='auto';
+  }catch(e){
+    chip.textContent='⚠️ '+e.message; goBtn.textContent='Coba lagi';
+    goBtn.style.opacity='1'; goBtn.style.pointerEvents='auto';
+  }
 }
 
-/* ---- translation stage (backend asli) ---- */
+/* ---- panggung terjemahan (Bayt al-Hikma) ---- */
 const stage=document.getElementById('stage'), bar=document.getElementById('bar'),
       pct=document.getElementById('pct'), stepText=document.getElementById('stepText'),
       done=document.getElementById('done'), dlBtn=document.getElementById('dlBtn');
 let moteTimer, polling=false;
-goBtn.addEventListener('click',startTranslate);
-document.getElementById('againBtn').addEventListener('click',e=>{e.preventDefault();closeDone();});
+goBtn.addEventListener('click',startFlow);
+document.getElementById('againBtn').addEventListener('click',e=>{e.preventDefault();resetAll();});
 
 function setStage(txt,p){
   if(txt!=null) stepText.textContent=txt;
   if(p!=null){bar.style.width=p+'%'; pct.textContent=Math.round(p)+'%';}
 }
-async function startTranslate(){
-  const f=file.files[0]; if(!f) return;
+function resetGo(){ goBtn.style.pointerEvents='auto'; goBtn.textContent='Bayar & Terjemahkan · '+rupiah(currentFile.price); }
+
+async function startFlow(){
+  if(!currentFile) return;
+  if(!cfg||!cfg.payment_enabled){ openStageAndTranslateFree(); return; }
+  if(!snapReady){ alert('Sebentar, memuat sistem pembayaran…'); return; }
+  goBtn.style.pointerEvents='none'; goBtn.textContent='Membuka pembayaran…';
+  try{
+    const r=await fetch('/api/checkout',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({file_id:currentFile.file_id})});
+    if(!r.ok){ const j=await r.json().catch(()=>({})); throw new Error(j.detail||'Gagal membuat pembayaran'); }
+    const {token,order_id}=await r.json();
+    window.snap.pay(token,{
+      onSuccess:()=>afterPaid(order_id),
+      onPending:()=>afterPaid(order_id),
+      onError:()=>{ resetGo(); alert('Pembayaran gagal. Coba lagi.'); },
+      onClose:()=>{ resetGo(); }
+    });
+  }catch(e){ resetGo(); alert(e.message); }
+}
+
+/* setelah bayar: verifikasi (mungkin perlu beberapa kali untuk QRIS) lalu terjemah */
+function afterPaid(order_id){
+  bar.style.background='linear-gradient(90deg,var(--orange),var(--gold))';
+  stage.classList.add('on'); spawnMotes(); setStage('Memverifikasi pembayaran…',1);
+  const t0=Date.now();
+  (async function tryConfirm(){
+    try{
+      const r=await fetch('/api/confirm',{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({file_id:currentFile.file_id,order_id})});
+      if(r.ok){ const {job_id}=await r.json(); polling=true; setStage('Membuka gulungan naskah…',3); return poll(job_id); }
+      if(r.status===402){
+        if(Date.now()-t0<120000){ setStage('Menunggu konfirmasi pembayaran…',2); return setTimeout(tryConfirm,3000); }
+        throw new Error('Pembayaran belum terkonfirmasi. Jika sudah membayar, tunggu sebentar lalu coba lagi.');
+      }
+      const j=await r.json().catch(()=>({})); throw new Error(j.detail||'Verifikasi gagal');
+    }catch(e){ failStage(e.message); }
+  })();
+}
+
+/* mode tanpa pembayaran (kunci Midtrans belum diisi) — untuk pengujian */
+async function openStageAndTranslateFree(){
   bar.style.background='linear-gradient(90deg,var(--orange),var(--gold))';
   stage.classList.add('on'); spawnMotes(); setStage('Menyiapkan naskah…',2);
-  try{
-    const fd=new FormData(); fd.append('file',f);
-    const res=await fetch('/api/translate',{method:'POST',body:fd});
-    if(!res.ok){ const j=await res.json().catch(()=>({})); throw new Error(j.detail||'Gagal mengunggah berkas'); }
-    const {job_id}=await res.json();
-    polling=true; poll(job_id);
-  }catch(e){ failStage(e.message); }
+  // tanpa pembayaran kita pakai endpoint lama tidak ada; jadi minta konfigurasi
+  failStage('Pembayaran belum dikonfigurasi (isi kunci Midtrans di .env).');
 }
+
 async function poll(id){
   if(!polling) return;
   try{
@@ -547,12 +619,15 @@ function finishReal(id){
 }
 function failStage(msg){
   polling=false; clearInterval(moteTimer);
-  stepText.textContent='Maaf — '+msg;
-  bar.style.background='#b5462e';
-  setTimeout(closeStage,3500);
+  stepText.textContent='Maaf — '+msg; bar.style.background='#b5462e';
+  setTimeout(closeStage,4000);
 }
 function closeStage(){stage.classList.remove('on');clearInterval(moteTimer);polling=false;bar.style.width='0';pct.textContent='0%';}
-function closeDone(){done.classList.remove('on');bar.style.width='0';pct.textContent='0%';}
+function resetAll(){
+  done.classList.remove('on'); bar.style.width='0'; pct.textContent='0%';
+  currentFile=null; file.value=''; chip.style.display='none'; quote.style.display='none';
+  goBtn.textContent='Pilih berkas dulu'; goBtn.style.opacity='.5'; goBtn.style.pointerEvents='none';
+}
 function spawnMotes(){
   const hall=document.querySelector('.hall');
   moteTimer=setInterval(()=>{
