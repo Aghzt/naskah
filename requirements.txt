@@ -1,0 +1,16 @@
+# Engine terjemahan PDF in-place (layout & gambar terjaga)
+pdf2zh==1.9.11
+BabelDOC==0.2.33
+
+# Klien API (DeepSeek via Sumopod, OpenAI-compatible)
+openai==2.38.0
+
+# Backend web (sudah ikut terpasang bersama pdf2zh)
+fastapi==0.136.3
+uvicorn==0.48.0
+python-multipart==0.0.30
+
+# Utilitas (render preview, hitung token, unduh model)
+PyMuPDF==1.25.2
+tiktoken==0.13.0
+requests==2.34.2

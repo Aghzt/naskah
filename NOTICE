@@ -1,0 +1,22 @@
+Naskah — Penerjemah Jurnal (EN → ID)
+Copyright (C) 2026
+
+Program ini berlisensi GNU Affero General Public License v3.0 (AGPL-3.0).
+Lihat berkas LICENSE untuk teks lengkapnya. Bila dijalankan sebagai layanan
+jaringan, kode sumber (termasuk modifikasi) wajib disediakan kepada pengguna.
+
+----------------------------------------------------------------------
+Perangkat lunak pihak ketiga yang digunakan
+----------------------------------------------------------------------
+
+- PDFMathTranslate (pdf2zh) — https://github.com/PDFMathTranslate/PDFMathTranslate
+  Lisensi: AGPL-3.0. Mesin terjemahan PDF in-place yang menjaga tata letak.
+
+- BabelDOC — https://github.com/funstory-ai/BabelDOC
+  Lisensi: AGPL-3.0. Mesin inti deteksi tata letak & rekonstruksi dokumen.
+
+- DocLayout-YOLO (model ONNX) — deteksi tata letak halaman.
+
+Model AI penerjemah: DeepSeek, diakses melalui Sumopod (endpoint OpenAI-compatible).
+
+Font: GoNotoKurrent (Noto) untuk perenderan teks hasil terjemahan.

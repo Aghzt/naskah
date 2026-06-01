@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Naskah · Penerjemah Jurnal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,500&family=Kaushan+Script&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --cream:#F1E7D2; --cream-2:#E7D9BC; --paper:#F8F1E0;
+  --terracotta:#C9512E; --terracotta-d:#A23C1D; --orange:#E08A4B;
+  --peach:#EBAE80; --teal:#2C474E; --teal-d:#21383E; --teal-l:#3C5F66;
+  --sage:#6E8E6A; --gold:#D9A441; --ink:#2A2018; --ink-soft:#4a3d30;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'DM Sans',system-ui,sans-serif;
+  background:var(--paper); color:var(--ink);
+  overflow-x:hidden;
+}
+.serif{font-family:'Fraunces',serif}
+.script{font-family:'Kaushan Script',cursive}
+
+/* paper grain overlay */
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---------- NAV ---------- */
+nav{
+  position:sticky;top:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 40px; background:var(--teal-d);
+  box-shadow:0 6px 24px rgba(0,0,0,.18);
+}
+.logo{display:flex;align-items:center;gap:12px;color:var(--peach)}
+.logo .mark{
+  width:40px;height:40px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,var(--orange),var(--terracotta));
+  display:grid;place-items:center;color:#fff;font-weight:900;
+  box-shadow:inset 0 0 0 2px rgba(255,255,255,.25), 0 4px 12px rgba(0,0,0,.3);
+  transform:translateZ(0)
+}
+.logo b{font-family:'Fraunces',serif;font-size:1.35rem;letter-spacing:.5px;color:var(--cream)}
+.logo b span{color:var(--orange)}
+.navlinks{display:flex;gap:30px;align-items:center}
+.navlinks a{color:var(--cream-2);text-decoration:none;font-weight:500;font-size:.95rem;opacity:.85;transition:.2s}
+.navlinks a:hover{opacity:1;color:var(--orange)}
+.nav-dots{display:flex;gap:8px}
+.nav-dots i{width:30px;height:30px;border-radius:50%;display:inline-block}
+.nav-dots i:nth-child(1){background:var(--terracotta)}
+.nav-dots i:nth-child(2){background:var(--sage)}
+.nav-dots i:nth-child(3){background:var(--gold)}
+
+/* ---------- HERO ---------- */
+.hero{position:relative;min-height:86vh;overflow:hidden;perspective:1200px}
+.hero-sky{position:absolute;inset:0;background:linear-gradient(180deg,#bcd3cf 0%,#d9cdb4 55%,#ead9bd 100%)}
+.layer{position:absolute;left:0;right:0;will-change:transform}
+.sun{position:absolute;left:auto;right:16%;top:14%;width:120px;height:120px;border-radius:50%;
+  background:radial-gradient(circle,#f4d9a8,#e9b877);box-shadow:0 0 80px 30px rgba(233,184,119,.5)}
+.mtns{bottom:32%;height:42%;
+  background:
+   radial-gradient(120px 90px at 20% 100%,var(--peach) 0 60%,transparent 61%),
+   linear-gradient(180deg,#cf8e63,#b9744a);
+  clip-path:polygon(0 60%,12% 35%,24% 55%,38% 25%,52% 50%,66% 22%,80% 48%,92% 30%,100% 52%,100% 100%,0 100%)}
+.mtns2{bottom:34%;height:30%;background:linear-gradient(180deg,#e0a06f,#d08a55);opacity:.7;
+  clip-path:polygon(0 70%,18% 45%,33% 65%,50% 38%,68% 62%,85% 42%,100% 64%,100% 100%,0 100%)}
+.lake{bottom:0;height:34%;background:linear-gradient(180deg,#9ec3c0,#7fabae);}
+.lake::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(180deg,transparent 0 16px,rgba(255,255,255,.18) 16px 18px)}
+.island{bottom:30%;left:48%;right:0;height:46%;
+  background:linear-gradient(180deg,#7f9b62,#5d7a48);
+  clip-path:polygon(8% 100%,2% 60%,18% 40%,40% 30%,70% 36%,92% 55%,100% 100%)}
+/* ===== Bayt al-Ḥikmah (House of Wisdom) ===== */
+.dome{position:absolute;left:auto;right:10%;bottom:38%;width:230px;height:300px;filter:drop-shadow(0 16px 22px rgba(0,0,0,.3))}
+.hw{position:absolute;inset:0}
+.hw span{position:absolute}
+/* twin minarets */
+.hw-minaret{bottom:0;width:24px;height:168px;background:linear-gradient(180deg,#cf5d34,#a23c1d);border-radius:6px 6px 0 0;box-shadow:inset -4px 0 8px rgba(0,0,0,.2)}
+.hw-minaret.left{left:14px}.hw-minaret.right{left:192px}
+.hw-minaret::before{content:"";position:absolute;top:-28px;left:50%;transform:translateX(-50%);width:32px;height:32px;background:radial-gradient(circle at 50% 70%,#dcb55c,#9c6f2f);border-radius:50% 50% 22% 22%}
+.hw-minaret::after{content:"";position:absolute;top:-44px;left:50%;transform:translateX(-50%);width:4px;height:18px;background:var(--gold);border-radius:2px;box-shadow:0 0 8px rgba(217,178,90,.7)}
+/* main hall */
+.hw-hall{bottom:0;left:36px;width:158px;height:104px;background:linear-gradient(180deg,#d2623a,#b8472a);border-radius:10px 10px 0 0;box-shadow:inset 0 0 0 2px rgba(255,255,255,.07)}
+.hw-drum{bottom:104px;left:70px;width:90px;height:36px;background:linear-gradient(180deg,#c4502c,#a83c1f);border-radius:6px}
+/* grand dome */
+.hw-domeTop{bottom:132px;left:53px;width:124px;height:92px;
+  background:radial-gradient(circle at 50% 82%,#e0bb64,#9c6f2f);
+  border-radius:50% 50% 16% 16%/64% 64% 16% 16%;box-shadow:inset -10px -8px 22px rgba(0,0,0,.28)}
+.hw-finial{bottom:218px;left:111px;width:6px;height:32px;background:var(--gold);border-radius:3px}
+.hw-finial::after{content:"";position:absolute;top:-13px;left:50%;transform:translateX(-50%);width:15px;height:15px;border-radius:50%;background:var(--gold);box-shadow:0 0 12px rgba(217,178,90,.85)}
+/* arched windows + door (glowing) */
+.hw-arch{bottom:18px;width:22px;height:44px;background:#34200f;border-radius:50% 50% 0 0/66% 66% 0 0;box-shadow:inset 0 8px 12px rgba(255,193,94,.3)}
+.hw-arch.a1{left:54px}.hw-arch.a2{left:148px}
+.hw-door{bottom:0;left:98px;width:34px;height:64px;background:#2a1a0c;border-radius:50% 50% 0 0/72% 72% 0 0;box-shadow:inset 0 10px 16px rgba(255,193,94,.28)}
+
+/* ===== Caravan menuju Bayt al-Ḥikmah ===== */
+.caravan{bottom:29%;left:0;right:0;height:90px;z-index:2}
+.camel{position:absolute;bottom:0;width:80px;height:66px;animation:march 26s linear infinite}
+.camel.c2{animation-delay:-9s}
+.camel.c3{animation-delay:-18s}
+.ci{position:absolute;inset:0;animation:bob .55s ease-in-out infinite}
+.camel span{position:absolute;background:#2c1a0e}
+.camel .body{bottom:16px;left:8px;width:48px;height:25px;border-radius:48% 52% 50% 50%/56% 56% 46% 46%}
+.camel .hump{bottom:31px;left:15px;width:32px;height:21px;border-radius:50% 50% 30% 30%}
+.camel .neck{bottom:27px;left:46px;width:10px;height:31px;border-radius:6px;transform:rotate(20deg);transform-origin:bottom left}
+.camel .head{bottom:50px;left:56px;width:20px;height:12px;border-radius:8px 12px 8px 6px}
+.camel .head::after{content:"";position:absolute;bottom:-2px;right:-6px;width:9px;height:6px;background:#2c1a0e;border-radius:4px}
+.camel .head::before{content:"";position:absolute;top:-5px;left:3px;width:4px;height:6px;background:#2c1a0e;border-radius:2px}
+.camel .rider{bottom:44px;left:18px;width:11px;height:17px;border-radius:6px 6px 2px 2px;background:#22130a}
+.camel .rider::before{content:"";position:absolute;top:-8px;left:50%;transform:translateX(-50%);width:10px;height:10px;border-radius:50%;background:#22130a}
+.camel .leg{bottom:0;width:5px;height:18px;border-radius:0 0 2px 2px;transform-origin:top center}
+.camel .leg.a{left:13px;animation:legA .55s linear infinite}
+.camel .leg.b{left:23px;animation:legB .55s linear infinite}
+.camel .leg.c{left:35px;animation:legA .55s linear infinite}
+.camel .leg.d{left:45px;animation:legB .55s linear infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@keyframes legA{0%,100%{transform:rotate(11deg)}50%{transform:rotate(-11deg)}}
+@keyframes legB{0%,100%{transform:rotate(-11deg)}50%{transform:rotate(11deg)}}
+@keyframes march{0%{left:6%;opacity:0}9%{opacity:1}84%{opacity:1}100%{left:72%;opacity:0}}
+.sail{position:absolute;bottom:6%;width:0;height:0}
+.sail b{position:absolute;width:2px;height:54px;background:#5b4632;left:0;bottom:0}
+.sail i{position:absolute;bottom:0;left:2px;width:0;height:0;border-left:34px solid #efe6d2;border-top:50px solid transparent;border-bottom:0}
+.sail.s1{left:14%}.sail.s2{left:24%;transform:scale(.8)}.sail.s3{left:6%;transform:scale(.65)}
+
+.hero-content{position:relative;z-index:5;max-width:560px;padding:8vh 0 0 7vw}
+.kicker{display:inline-block;background:var(--teal-d);color:var(--peach);
+  padding:6px 16px;border-radius:30px;font-size:.78rem;letter-spacing:2px;text-transform:uppercase;margin-bottom:18px;
+  box-shadow:0 6px 16px rgba(0,0,0,.2)}
+.hero h1{font-family:'Kaushan Script',cursive;color:var(--terracotta);font-size:clamp(3rem,7vw,5.6rem);line-height:.95;
+  text-shadow:3px 4px 0 rgba(255,255,255,.5), 6px 8px 0 rgba(168,60,29,.18)}
+.hero h1 em{display:block;font-style:normal;color:var(--teal)}
+.hero p{margin:22px 0 30px;font-size:1.1rem;max-width:430px;color:var(--ink-soft);line-height:1.6}
+.btn{cursor:pointer;border:none;font-family:'DM Sans';font-weight:700;font-size:1rem;
+  padding:16px 34px;border-radius:14px;color:#fff;
+  background:linear-gradient(180deg,var(--terracotta),var(--terracotta-d));
+  box-shadow:0 10px 0 #7d2c12, 0 16px 26px rgba(0,0,0,.3);
+  transform:translateY(0);transition:.12s}
+.btn:active{transform:translateY(6px);box-shadow:0 4px 0 #7d2c12,0 10px 18px rgba(0,0,0,.3)}
+.btn.ghost{background:transparent;color:var(--teal);box-shadow:inset 0 0 0 2px var(--teal);margin-left:14px}
+
+/* ---------- UPLOAD / WORKBENCH ---------- */
+.bench{background:var(--teal);padding:80px 6vw;position:relative}
+.bench h2{font-family:'Fraunces',serif;color:var(--cream);text-align:center;font-size:2.4rem;margin-bottom:6px}
+.bench h2 span{color:var(--orange)}
+.bench .sub{text-align:center;color:#a9c0bf;margin-bottom:48px}
+.drop-wrap{max-width:760px;margin:0 auto;perspective:1100px}
+.drop{
+  position:relative;background:linear-gradient(180deg,var(--paper),var(--cream));
+  border:3px dashed var(--terracotta);border-radius:22px;padding:54px 30px;text-align:center;
+  transform-style:preserve-3d;transition:transform .2s ease, box-shadow .2s;
+  box-shadow:0 30px 50px rgba(0,0,0,.35);cursor:pointer
+}
+.drop:hover{box-shadow:0 40px 70px rgba(0,0,0,.45)}
+.drop .scroll-ic{font-size:3.4rem;transform:translateZ(40px);filter:drop-shadow(0 8px 10px rgba(0,0,0,.2))}
+.drop h3{font-family:'Fraunces',serif;font-size:1.5rem;margin:14px 0 6px;transform:translateZ(24px)}
+.drop p{color:var(--ink-soft);transform:translateZ(12px)}
+.drop .pick{display:inline-block;margin-top:18px;background:var(--teal);color:#fff;padding:12px 26px;border-radius:12px;font-weight:700;transform:translateZ(30px);box-shadow:0 8px 0 var(--teal-d)}
+.filechip{display:none;margin-top:18px;background:var(--sage);color:#fff;padding:10px 18px;border-radius:30px;font-weight:600}
+
+/* feature cards */
+.cards{max-width:1080px;margin:64px auto 0;display:grid;grid-template-columns:repeat(3,1fr);gap:26px;perspective:1200px}
+.card{background:var(--cream);border-radius:18px;padding:30px 26px;transform-style:preserve-3d;transition:.2s;
+  box-shadow:0 18px 36px rgba(0,0,0,.28);border-top:6px solid var(--orange)}
+.card:nth-child(2){border-top-color:var(--sage)}
+.card:nth-child(3){border-top-color:var(--gold)}
+.card .ic{width:60px;height:60px;border-radius:14px;display:grid;place-items:center;font-size:1.8rem;
+  background:var(--peach);transform:translateZ(30px);box-shadow:0 8px 14px rgba(0,0,0,.2)}
+.card h4{font-family:'Fraunces',serif;font-size:1.25rem;margin:18px 0 8px;transform:translateZ(18px)}
+.card p{color:var(--ink-soft);font-size:.95rem;line-height:1.55;transform:translateZ(8px)}
+
+/* ---------- BAYT AL-HIKMA TRANSLATION OVERLAY ---------- */
+.stage{position:fixed;inset:0;z-index:500;display:none;place-items:center;
+  background:radial-gradient(circle at 50% 30%,#3a2415,#1a0f08 80%)}
+.stage.on{display:grid;animation:fade .5s ease}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.hall{position:relative;width:min(680px,92vw);height:min(580px,88vh);
+  background:linear-gradient(180deg,#79502e,#4a2e18);border-radius:20px;overflow:hidden;
+  box-shadow:0 40px 90px rgba(0,0,0,.7), inset 0 0 90px rgba(0,0,0,.45)}
+/* geometric tile band */
+.hall::before{content:"";position:absolute;inset:0;opacity:.10;
+  background-image:
+   radial-gradient(circle at 0 0,transparent 12px,var(--gold) 13px 14px,transparent 15px),
+   radial-gradient(circle at 30px 30px,transparent 12px,var(--gold) 13px 14px,transparent 15px);
+  background-size:60px 60px}
+/* arches */
+.arches{position:absolute;top:0;left:0;right:0;height:160px;display:flex;justify-content:space-around;align-items:flex-start}
+.arch{width:120px;height:150px;background:linear-gradient(180deg,#6b4427,#4a2e18);
+  border-radius:60px 60px 0 0;position:relative;box-shadow:inset 0 -10px 30px rgba(0,0,0,.5)}
+.arch::after{content:"";position:absolute;inset:14px 14px 0;border-radius:48px 48px 0 0;
+  background:linear-gradient(180deg,#2a1a0e,#150c06)}
+/* hanging lantern */
+.lantern{position:absolute;top:0;left:50%;transform:translateX(-50%);width:4px;height:120px;background:#caa24a;transform-origin:top;
+  animation:sway 4s ease-in-out infinite}
+.lantern .lamp{position:absolute;bottom:-26px;left:50%;transform:translateX(-50%);width:30px;height:38px;
+  background:radial-gradient(circle at 50% 40%,#ffd98a,#c8852f);border-radius:6px 6px 14px 14px;
+  box-shadow:0 0 50px 16px rgba(255,193,94,.5);animation:flick 2.2s ease-in-out infinite}
+@keyframes sway{0%,100%{transform:translateX(-50%) rotate(2.5deg)}50%{transform:translateX(-50%) rotate(-2.5deg)}}
+@keyframes flick{0%,100%{opacity:1}45%{opacity:.78}70%{opacity:.92}}
+
+/* desk + scribe */
+.scribe-scene{position:absolute;bottom:128px;left:50%;transform:translateX(-50%);width:360px;height:300px}
+.desk{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);width:300px;height:30px;
+  background:linear-gradient(180deg,#8a5a32,#5e3a1f);border-radius:6px;box-shadow:0 14px 30px rgba(0,0,0,.5)}
+.desk::after{content:"";position:absolute;bottom:-46px;left:30px;right:30px;height:46px;
+  background:linear-gradient(180deg,#5e3a1f,#3a2415)}
+/* manuscript on desk */
+.manuscript{position:absolute;bottom:60px;left:50%;transform:translateX(-50%) rotate(-3deg);
+  width:150px;height:96px;background:#f3e7cc;border-radius:4px;box-shadow:0 10px 20px rgba(0,0,0,.4);overflow:hidden}
+.manuscript .line{height:6px;margin:9px 12px;border-radius:3px;background:#b89b6e;width:0;
+  animation:write 2.4s ease-in-out infinite}
+.manuscript .line:nth-child(2){animation-delay:.3s}
+.manuscript .line:nth-child(3){animation-delay:.6s;background:var(--terracotta)}
+.manuscript .line:nth-child(4){animation-delay:.9s}
+.manuscript .line:nth-child(5){animation-delay:1.2s}
+@keyframes write{0%{width:0}60%{width:calc(100% - 24px)}100%{width:calc(100% - 24px)}}
+/* scribe body */
+.scribe{position:absolute;bottom:64px;left:64px;width:120px;height:160px}
+.s-robe{position:absolute;bottom:0;left:20px;width:80px;height:110px;
+  background:linear-gradient(180deg,var(--sage),#4f6a48);border-radius:40px 40px 14px 14px;box-shadow:inset -8px 0 14px rgba(0,0,0,.25)}
+.s-head{position:absolute;bottom:104px;left:44px;width:36px;height:36px;border-radius:50%;
+  background:#caa074;box-shadow:inset -4px -2px 6px rgba(0,0,0,.2)}
+.s-turban{position:absolute;bottom:128px;left:38px;width:48px;height:26px;border-radius:24px 24px 8px 8px;
+  background:linear-gradient(180deg,#e7d4af,#cdb585)}
+.s-arm{position:absolute;bottom:74px;left:86px;width:48px;height:14px;border-radius:8px;
+  background:#4f6a48;transform-origin:left center;animation:scribe-write 1.4s ease-in-out infinite}
+.s-quill{position:absolute;right:-26px;top:-22px;width:4px;height:34px;background:#3a2415;transform:rotate(35deg);transform-origin:bottom}
+.s-quill::after{content:"";position:absolute;top:-16px;left:-4px;width:12px;height:24px;border-radius:50% 50% 50% 0;
+  background:linear-gradient(180deg,#f0e3c6,#cbb78a);transform:rotate(8deg)}
+@keyframes scribe-write{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(6deg)}}
+
+/* floating papers */
+.mote{position:absolute;border-radius:2px;background:#e9dcbd;opacity:.0;box-shadow:0 4px 8px rgba(0,0,0,.3);
+  animation:float-up linear infinite}
+@keyframes float-up{
+  0%{opacity:0;transform:translateY(40px) rotate(0)}
+  15%{opacity:.85}
+  100%{opacity:0;transform:translateY(-260px) rotate(120deg)}
+}
+
+/* stage text + progress */
+.stage-info{position:absolute;bottom:0;left:0;right:0;text-align:center;color:var(--cream);
+  padding:34px 0 18px;background:linear-gradient(180deg,transparent,rgba(26,15,8,.92) 38%)}
+.stage-info .arabic{font-family:'Fraunces',serif;font-size:1.15rem;color:var(--gold);letter-spacing:1px}
+.stage-info .step{margin-top:4px;font-size:1.05rem;font-weight:600;min-height:1.4em}
+.scrollbar{margin:14px auto 0;width:70%;height:12px;background:#2a1a0e;border-radius:8px;overflow:hidden;box-shadow:inset 0 2px 6px rgba(0,0,0,.6)}
+.scrollbar i{display:block;height:100%;width:0;border-radius:8px;
+  background:linear-gradient(90deg,var(--orange),var(--gold));transition:width .5s ease}
+.stage-pct{margin-top:6px;font-size:.85rem;color:#caa24a}
+.stage-close{position:absolute;top:14px;right:16px;color:#caa24a;background:none;border:none;font-size:1.5rem;cursor:pointer}
+
+/* result toast */
+.done{display:none;position:fixed;z-index:600;inset:0;place-items:center;background:rgba(20,12,6,.7)}
+.done.on{display:grid;animation:fade .4s}
+.done .box{background:var(--cream);border-radius:20px;padding:42px;text-align:center;max-width:420px;
+  box-shadow:0 30px 70px rgba(0,0,0,.5);border-top:8px solid var(--sage)}
+.done .box .seal{font-size:3rem}
+.done .box h3{font-family:'Fraunces',serif;font-size:1.7rem;margin:10px 0}
+.done .box p{color:var(--ink-soft);margin-bottom:22px}
+
+/* ---------- SHOWCASE ---------- */
+.showcase{padding:84px 6vw;background:linear-gradient(180deg,var(--cream),var(--paper))}
+.showcase h2{font-family:'Fraunces',serif;text-align:center;font-size:2.2rem;color:var(--teal);margin-bottom:8px}
+.showcase .sub2{text-align:center;color:var(--ink-soft);margin-bottom:44px}
+.show-grid{max-width:1080px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:30px}
+.show-card{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 18px 40px rgba(0,0,0,.18);border-top:6px solid var(--terracotta);transition:.2s}
+.show-card:hover{transform:translateY(-6px);box-shadow:0 26px 54px rgba(0,0,0,.26)}
+.show-card img{width:100%;display:block;border-bottom:1px solid #e7dcc4}
+.show-body{padding:20px 22px}
+.show-body h4{font-family:'Fraunces',serif;font-size:1.2rem;margin-bottom:6px;color:var(--ink)}
+.show-body .meta{color:var(--sage);font-weight:600;font-size:.88rem;margin-bottom:12px}
+.show-link{display:inline-block;color:var(--terracotta);font-weight:700;text-decoration:none}
+.show-link:hover{color:var(--terracotta-d)}
+@media(max-width:760px){.show-grid{grid-template-columns:1fr}}
+
+footer{background:var(--teal-d);color:#9fb6b5;text-align:center;padding:30px;font-size:.9rem}
+footer a{color:var(--orange);text-decoration:none}
+
+@media(max-width:760px){
+  .cards{grid-template-columns:1fr}
+  .navlinks{display:none}
+  .dome,.sail{display:none}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">
+    <div class="mark serif">ن</div>
+    <b>Nas<span>kah</span></b>
+  </div>
+  <div class="navlinks">
+    <a href="#bench">Terjemahkan</a>
+    <a href="#contoh">Contoh</a>
+    <a href="#fitur">Fitur</a>
+    <a href="#tentang">Tentang</a>
+  </div>
+  <div class="nav-dots"><i></i><i></i><i></i></div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-sky"></div>
+  <div class="layer sun" data-depth="0.1"></div>
+  <div class="layer mtns" data-depth="0.25"></div>
+  <div class="layer mtns2" data-depth="0.35"></div>
+  <div class="layer island" data-depth="0.5"></div>
+  <div class="layer dome" data-depth="0.45">
+    <div class="hw">
+      <span class="hw-minaret left"></span>
+      <span class="hw-minaret right"></span>
+      <span class="hw-hall"></span>
+      <span class="hw-drum"></span>
+      <span class="hw-domeTop"></span>
+      <span class="hw-finial"></span>
+      <span class="hw-arch a1"></span>
+      <span class="hw-arch a2"></span>
+      <span class="hw-door"></span>
+    </div>
+  </div>
+  <div class="layer lake" data-depth="0.15">
+    <div class="sail s1"><b></b><i></i></div>
+    <div class="sail s2"><b></b><i></i></div>
+    <div class="sail s3"><b></b><i></i></div>
+  </div>
+  <div class="layer caravan" data-depth="0.4">
+    <div class="camel c1"><div class="ci">
+      <span class="leg a"></span><span class="leg b"></span><span class="leg c"></span><span class="leg d"></span>
+      <span class="body"></span><span class="hump"></span><span class="rider"></span>
+      <span class="neck"></span><span class="head"></span>
+    </div></div>
+    <div class="camel c2"><div class="ci">
+      <span class="leg a"></span><span class="leg b"></span><span class="leg c"></span><span class="leg d"></span>
+      <span class="body"></span><span class="hump"></span><span class="rider"></span>
+      <span class="neck"></span><span class="head"></span>
+    </div></div>
+    <div class="camel c3"><div class="ci">
+      <span class="leg a"></span><span class="leg b"></span><span class="leg c"></span><span class="leg d"></span>
+      <span class="body"></span><span class="hump"></span><span class="rider"></span>
+      <span class="neck"></span><span class="head"></span>
+    </div></div>
+  </div>
+
+  <div class="hero-content">
+    <span class="kicker">Penerjemah Jurnal · EN → ID</span>
+    <h1>Terjemahkan <em>seperti para</em> penyalin.</h1>
+    <p>Unggah jurnal berbahasa Inggris — layout, gambar, dan rumusnya tetap utuh. Hanya kata-katanya yang berpindah ke Bahasa Indonesia, disalin rapi bak naskah Bayt al-Ḥikmah.</p>
+    <button class="btn" onclick="document.getElementById('bench').scrollIntoView()">Mulai Menyalin</button>
+    <button class="btn ghost" onclick="document.getElementById('fitur').scrollIntoView()">Lihat Fitur</button>
+  </div>
+</header>
+
+<!-- WORKBENCH -->
+<section class="bench" id="bench">
+  <h2>Meja <span>Penyalin</span></h2>
+  <p class="sub">Letakkan naskahmu di atas meja. Para penyalin akan mulai bekerja.</p>
+
+  <div class="drop-wrap">
+    <div class="drop" id="drop" tabindex="0">
+      <div class="scroll-ic">📜</div>
+      <h3>Letakkan PDF jurnal di sini</h3>
+      <p>atau klik untuk memilih berkas (.pdf)</p>
+      <span class="pick">Pilih Berkas</span>
+      <div class="filechip" id="filechip"></div>
+      <input type="file" id="file" accept="application/pdf" hidden />
+    </div>
+  </div>
+
+  <div style="text-align:center;margin-top:34px">
+    <button class="btn" id="goBtn" style="opacity:.5;pointer-events:none">Mulai Terjemahkan</button>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section style="padding:80px 6vw" id="fitur">
+  <h2 class="serif" style="text-align:center;font-size:2.2rem;color:var(--teal);margin-bottom:8px">Keutamaan Penyalinan</h2>
+  <p style="text-align:center;color:var(--ink-soft);margin-bottom:10px">Ketelitian masa lampau, kecepatan masa kini.</p>
+  <div class="cards">
+    <div class="card">
+      <div class="ic">🖼️</div>
+      <h4>Layout & Gambar Utuh</h4>
+      <p>Gambar, tabel, grafik, dan tata letak dua kolom tetap persis di tempatnya. Hanya teks yang diterjemahkan.</p>
+    </div>
+    <div class="card">
+      <div class="ic">📐</div>
+      <h4>Rumus Terjaga</h4>
+      <p>Notasi matematika, simbol, dan nama ilmiah dibiarkan apa adanya — tidak dirusak penerjemahan.</p>
+    </div>
+    <div class="card">
+      <div class="ic">✒️</div>
+      <h4>Diksi Akademik</h4>
+      <p>Istilah baku Bahasa Indonesia, nama lembaga tetap asli, gaya bahasa ilmiah yang konsisten.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SHOWCASE -->
+<section class="showcase" id="contoh">
+  <h2 class="serif">Contoh Naskah yang Telah Disalin</h2>
+  <p class="sub2">Hasil nyata dari jurnal asli — layout, gambar, dan rumus tetap utuh.</p>
+  <div class="show-grid">
+    <article class="show-card">
+      <img src="assets/evo-compare.jpg" alt="Perbandingan terjemahan Evo" loading="lazy" />
+      <div class="show-body">
+        <h4>Pemodelan sekuens skala genom dengan Evo</h4>
+        <p class="meta">Arc Institute / Stanford · 48 halaman · biologi komputasi</p>
+        <a class="show-link" href="examples/evo-id.pdf" target="_blank" rel="noopener">Lihat hasil (PDF) →</a>
+      </div>
+    </article>
+    <article class="show-card">
+      <img src="assets/nature-compare.jpg" alt="Perbandingan terjemahan pan-kanker" loading="lazy" />
+      <div class="show-body">
+        <h4>Analisis pan-kanker seluruh genom</h4>
+        <p class="meta">Nature · 50 halaman · genomika</p>
+        <a class="show-link" href="examples/nature-id.pdf" target="_blank" rel="noopener">Lihat hasil (PDF) →</a>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- TRANSLATION STAGE (Bayt al-Hikma) -->
+<div class="stage" id="stage">
+  <div class="hall">
+    <button class="stage-close" onclick="closeStage()">✕</button>
+    <div class="arches">
+      <div class="arch"></div><div class="arch"></div><div class="arch"></div><div class="arch"></div>
+    </div>
+    <div class="lantern"><div class="lamp"></div></div>
+
+    <div class="scribe-scene">
+      <div class="manuscript">
+        <div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div>
+      </div>
+      <div class="desk"></div>
+      <div class="scribe">
+        <div class="s-robe"></div>
+        <div class="s-head"></div>
+        <div class="s-turban"></div>
+        <div class="s-arm"><div class="s-quill"></div></div>
+      </div>
+    </div>
+
+    <div class="stage-info">
+      <div class="arabic">دار الحكمة · Rumah Kebijaksanaan</div>
+      <div class="step" id="stepText">Membuka gulungan naskah…</div>
+      <div class="scrollbar"><i id="bar"></i></div>
+      <div class="stage-pct" id="pct">0%</div>
+    </div>
+  </div>
+</div>
+
+<!-- DONE -->
+<div class="done" id="done">
+  <div class="box">
+    <div class="seal">🏺</div>
+    <h3>Naskah selesai disalin</h3>
+    <p>Jurnalmu telah diterjemahkan ke Bahasa Indonesia dengan layout asli terjaga.</p>
+    <a class="btn" id="dlBtn" href="#" download>Unduh Hasil (.pdf)</a>
+    <div style="margin-top:16px"><a href="#" id="againBtn" style="color:var(--ink-soft);font-size:.9rem">Terjemahkan jurnal lain</a></div>
+  </div>
+</div>
+
+<footer id="tentang">
+  Naskah · Penerjemah Jurnal EN→ID — purwarupa antarmuka.<br/>
+  Ditenagai <a href="https://github.com/PDFMathTranslate/PDFMathTranslate">pdf2zh</a> + DeepSeek. Lisensi AGPL-3.0.
+</footer>
+
+<script>
+/* ---- parallax hero ---- */
+const layers=[...document.querySelectorAll('.layer')];
+window.addEventListener('mousemove',e=>{
+  const x=(e.clientX/window.innerWidth-.5), y=(e.clientY/window.innerHeight-.5);
+  layers.forEach(l=>{const d=parseFloat(l.dataset.depth)||.2;
+    l.style.transform=`translate3d(${x*d*-40}px,${y*d*-20}px,0)`;});
+});
+
+/* ---- 3D tilt on cards & drop ---- */
+function tilt(el,max=10){
+  el.addEventListener('mousemove',e=>{
+    const r=el.getBoundingClientRect();
+    const px=(e.clientX-r.left)/r.width-.5, py=(e.clientY-r.top)/r.height-.5;
+    el.style.transform=`rotateY(${px*max}deg) rotateX(${-py*max}deg) translateY(-4px)`;
+  });
+  el.addEventListener('mouseleave',()=>el.style.transform='');
+}
+document.querySelectorAll('.card').forEach(c=>tilt(c,9));
+tilt(document.getElementById('drop'),7);
+
+/* ---- file pick ---- */
+const drop=document.getElementById('drop'), file=document.getElementById('file'),
+      chip=document.getElementById('filechip'), goBtn=document.getElementById('goBtn');
+drop.addEventListener('click',()=>file.click());
+drop.addEventListener('keydown',e=>{if(e.key==='Enter')file.click()});
+['dragover','dragenter'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.style.borderColor='var(--sage)'}));
+['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.style.borderColor='var(--terracotta)'}));
+drop.addEventListener('drop',e=>{if(e.dataTransfer.files[0])setFile(e.dataTransfer.files[0])});
+file.addEventListener('change',()=>{if(file.files[0])setFile(file.files[0])});
+function setFile(f){
+  chip.style.display='inline-block';
+  chip.textContent='📄 '+f.name;
+  goBtn.style.opacity='1';goBtn.style.pointerEvents='auto';
+}
+
+/* ---- translation stage (backend asli) ---- */
+const stage=document.getElementById('stage'), bar=document.getElementById('bar'),
+      pct=document.getElementById('pct'), stepText=document.getElementById('stepText'),
+      done=document.getElementById('done'), dlBtn=document.getElementById('dlBtn');
+let moteTimer, polling=false;
+goBtn.addEventListener('click',startTranslate);
+document.getElementById('againBtn').addEventListener('click',e=>{e.preventDefault();closeDone();});
+
+function setStage(txt,p){
+  if(txt!=null) stepText.textContent=txt;
+  if(p!=null){bar.style.width=p+'%'; pct.textContent=Math.round(p)+'%';}
+}
+async function startTranslate(){
+  const f=file.files[0]; if(!f) return;
+  bar.style.background='linear-gradient(90deg,var(--orange),var(--gold))';
+  stage.classList.add('on'); spawnMotes(); setStage('Menyiapkan naskah…',2);
+  try{
+    const fd=new FormData(); fd.append('file',f);
+    const res=await fetch('/api/translate',{method:'POST',body:fd});
+    if(!res.ok){ const j=await res.json().catch(()=>({})); throw new Error(j.detail||'Gagal mengunggah berkas'); }
+    const {job_id}=await res.json();
+    polling=true; poll(job_id);
+  }catch(e){ failStage(e.message); }
+}
+async function poll(id){
+  if(!polling) return;
+  try{
+    const r=await fetch('/api/status/'+id); const j=await r.json();
+    setStage(j.stage, j.progress);
+    if(j.status==='done'){ return finishReal(id); }
+    if(j.status==='error'){ return failStage(j.error||'Terjadi kesalahan saat menerjemahkan'); }
+  }catch(e){ /* sementara, lanjut polling */ }
+  setTimeout(()=>poll(id),1200);
+}
+function finishReal(id){
+  polling=false; clearInterval(moteTimer);
+  setStage('Menjilid naskah hasil…',100);
+  dlBtn.setAttribute('href','/api/download/'+id);
+  setTimeout(()=>{ stage.classList.remove('on'); done.classList.add('on'); },500);
+}
+function failStage(msg){
+  polling=false; clearInterval(moteTimer);
+  stepText.textContent='Maaf — '+msg;
+  bar.style.background='#b5462e';
+  setTimeout(closeStage,3500);
+}
+function closeStage(){stage.classList.remove('on');clearInterval(moteTimer);polling=false;bar.style.width='0';pct.textContent='0%';}
+function closeDone(){done.classList.remove('on');bar.style.width='0';pct.textContent='0%';}
+function spawnMotes(){
+  const hall=document.querySelector('.hall');
+  moteTimer=setInterval(()=>{
+    const m=document.createElement('div');m.className='mote';
+    const s=4+Math.random()*8;
+    m.style.width=s+'px';m.style.height=(s*1.3)+'px';
+    m.style.left=(20+Math.random()*60)+'%';m.style.bottom='90px';
+    m.style.animationDuration=(3+Math.random()*2.5)+'s';
+    hall.appendChild(m);
+    setTimeout(()=>m.remove(),5500);
+  },360);
+}
+</script>
+</body>
+</html>

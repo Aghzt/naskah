@@ -1,0 +1,10 @@
+.venv/
+.env
+*.pdf
+# kecuali PDF contoh untuk galeri web
+!web/examples/*.pdf
+__pycache__/
+*.pyc
+output/
+output/jobs/
+.pdf2zh_cache/
