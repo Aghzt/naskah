@@ -1,4 +1,15 @@
-# Jurnal Translator (EN → ID)
+---
+title: Naskah
+emoji: 🏛️
+colorFrom: orange
+colorTo: indigo
+sdk: docker
+app_port: 7860
+pinned: false
+license: agpl-3.0
+---
+
+# Naskah — Jurnal Translator (EN → ID)
 
 Penerjemah PDF jurnal akademik dari Bahasa Inggris ke Bahasa Indonesia yang
 **mempertahankan layout asli**: gambar, tabel, grafik, rumus, dan tata letak 2

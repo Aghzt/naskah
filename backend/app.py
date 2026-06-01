@@ -27,38 +27,42 @@ PROMPT_FILE = ROOT / "prompts" / "prompt_akademik.txt"
 JOBS_DIR.mkdir(parents=True, exist_ok=True)
 
 
-# ---------- konfigurasi (.env) ----------
-def load_env() -> dict:
-    envs = {}
-    env_path = ROOT / ".env"
-    if not env_path.exists():
-        raise RuntimeError(".env tidak ditemukan. Salin dari .env.example dan isi.")
-    for line in env_path.read_text(encoding="utf-8").splitlines():
+# ---------- konfigurasi ----------
+# Lokal: muat .env ke os.environ. Di HF Spaces: pakai Secrets (sudah di os.environ).
+_env_file = ROOT / ".env"
+if _env_file.exists():
+    for line in _env_file.read_text(encoding="utf-8").splitlines():
         line = line.strip()
         if line and not line.startswith("#") and "=" in line:
             k, v = line.split("=", 1)
-            envs[k.strip()] = v.strip()
-    return envs
+            os.environ.setdefault(k.strip(), v.strip())
 
 
-ENV = load_env()
-for k, v in ENV.items():
-    os.environ.setdefault(k, v)
+def env(key: str, default: str = "") -> str:
+    return os.environ.get(key, default)
+
+
+# diteruskan ke pdf2zh (translator OpenAI/DeepSeek)
+ENV = {
+    "OPENAI_BASE_URL": env("OPENAI_BASE_URL"),
+    "OPENAI_API_KEY": env("OPENAI_API_KEY"),
+    "OPENAI_MODEL": env("OPENAI_MODEL"),
+}
 
 PROMPT_TEMPLATE = Template(PROMPT_FILE.read_text(encoding="utf-8"))
 
 # Midtrans
-MID_SERVER = ENV.get("MIDTRANS_SERVER_KEY", "")
-MID_CLIENT = ENV.get("MIDTRANS_CLIENT_KEY", "")
-MID_PROD = ENV.get("MIDTRANS_PRODUCTION", "false").lower() == "true"
+MID_SERVER = env("MIDTRANS_SERVER_KEY")
+MID_CLIENT = env("MIDTRANS_CLIENT_KEY")
+MID_PROD = env("MIDTRANS_PRODUCTION", "false").lower() == "true"
 SNAP_URL = ("https://app.midtrans.com/snap/v1/transactions" if MID_PROD
             else "https://app.sandbox.midtrans.com/snap/v1/transactions")
 STATUS_BASE = ("https://api.midtrans.com/v2" if MID_PROD
                else "https://api.sandbox.midtrans.com/v2")
 
 # Harga
-PRICE_PER_PAGE = int(ENV.get("PRICE_PER_PAGE", "500"))
-PRICE_MIN = int(ENV.get("PRICE_MIN", "3000"))
+PRICE_PER_PAGE = int(env("PRICE_PER_PAGE", "500"))
+PRICE_MIN = int(env("PRICE_MIN", "3000"))
 
 
 def compute_price(pages: int) -> int:
